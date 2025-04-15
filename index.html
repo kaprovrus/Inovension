@@ -29,16 +29,20 @@
     }
 
     .photo-frame {
-      border: 5px solid #d8bfd8;
-      margin: 20px auto;
-      width: 150px;
-      height: 300px;
-      background-color: #eee;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 16px;
-      color: #555;
+  width: 400px;               /* Ширина рамки */
+  height: 300px;              /* Высота рамки */
+  overflow: hidden;           /* Обрезает всё, что выходит за рамки */
+  border: 4px solid white;
+  border-radius: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  margin: 20px auto;
+}
+
+.family-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;          /* Обеспечивает аккуратное обрезание без искажений */
+
     }
 
     .lilies {
@@ -115,7 +119,7 @@
 </form>
 
   <audio autoplay loop>
-  <source src="music.mp3" type="audio/mpeg">
+  <source src="https://muztok.com/uploads/files/2021-09/music_9136.mp3" type="audio/mpeg">
   Ваш браузер не поддерживает аудио.
 </audio>
 </div>
