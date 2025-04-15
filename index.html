@@ -2,87 +2,137 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <title>Приглашение на юбилей</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500&display=swap" rel="stylesheet">
+  <title>Приглашение на юбилей Талиги Габдуловны</title>
   <style>
     body {
       margin: 0;
-      font-family: 'Playfair Display', serif;
-      background: #fff8f0;
-      color: #4b2e2e;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
+      font-family: Georgia, serif;
+      background: url('URL_ТВОЕГО_ФОТО') no-repeat center center fixed;
+      background-size: cover;
+      overflow-x: hidden;
+      text-align: center;
+    }
+
+    h1, h2 {
+      margin: 20px 0;
+      color: #fff8f0;
+      text-shadow: 1px 1px 3px #000;
+    }
+
+    .invitation {
+      margin: 40px auto;
       padding: 30px;
-      background-image: url('https://www.transparenttextures.com/patterns/gold-scale.png');
-    }
-    .container {
-      background: white;
+      background-color: rgba(255, 255, 255, 0.9);
       border-radius: 20px;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-      padding: 40px;
-      max-width: 600px;
-      width: 100%;
-      animation: fadeIn 1.5s ease-in-out;
+      max-width: 720px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
     }
-    h1 {
-      font-size: 28px;
-      color: #8c4d2d;
-      text-align: center;
-    }
-    p {
-      font-size: 18px;
-      text-align: center;
-    }
-    form {
+
+    .photo-frame {
+      border: 5px solid #d8bfd8;
+      margin: 20px auto;
+      width: 300px;
+      height: 400px;
+      background-color: #eee;
       display: flex;
-      flex-direction: column;
-      gap: 15px;
-      margin-top: 20px;
+      justify-content: center;
+      align-items: center;
+      font-size: 16px;
+      color: #555;
     }
-    input[type="text"] {
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
+
+    .lilies {
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
     }
-    button {
-      padding: 10px;
-      background-color: #8c4d2d;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
+
+    .lily {
+      position: absolute;
+      width: 50px;
+      animation: fall linear infinite;
+    }
+
+    @keyframes fall {
+      0% { transform: translateY(-100px) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+    }
+
+    form {
+      margin-top: 30px;
       font-size: 16px;
     }
-    button:hover {
-      background-color: #a85e3c;
+
+    input, select {
+      padding: 8px;
+      margin: 10px;
+      border-radius: 10px;
+      border: 1px solid #aaa;
     }
-    @keyframes fadeIn {
-      from {opacity: 0; transform: translateY(20px);}
-      to {opacity: 1; transform: translateY(0);}
+
+    button {
+      padding: 10px 20px;
+      background-color: #ff69b4;
+      border: none;
+      border-radius: 10px;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
     }
+
+    audio {
+      margin-top: 20px;
+    }
+
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Приглашение на юбилей</h1>
-    <p>Семья Капаровых приглашает Вас на<br><strong>70-летие Талиги Габдуловны</strong>!</p>
-    <p>Праздник состоится в городе Алматы.<br><em>Время и место будут сообщены позже.</em></p>
-    <p>Пожалуйста, подтвердите своё участие:</p>
 
-    <form action="https://formspree.io/f/moqgjgpk" method="POST">
-      <input type="text" name="Имя гостя" placeholder="Ваше имя" required>
-      <label><input type="radio" name="Ответ" value="Приеду" required> Приеду</label>
-      <label><input type="radio" name="Ответ" value="Не смогу"> Не смогу</label>
-      <button type="submit">Отправить</button>
-    </form>
+<div class="invitation">
+  <h1>Приглашение</h1>
+  <h2>Юбилей Талиги Габдуловны — 70 лет</h2>
+  <p>С любовью приглашает <strong>семья Капаровых</strong></p>
+  <p>Праздник состоится в Алматы.<br><em>Точная дата и место будут сообщены позже.</em></p>
+
+  <div class="photo-frame">
+    <a href="#" target="_blank">Здесь будет семейное фото</a>
   </div>
 
-  <!-- Фоновая музыка (по желанию можно заменить ссылку) -->
+  <form
+  action="https://formspree.io/f/xyzevdqb"
+  method="POST"
+>
+  <input type="text" name="Имя гостя" required>
+  <select name="Приедет ли гость?">
+    <option value="Да">Да</option>
+    <option value="Нет">Нет</option>
+  </select>
+  <button type="submit">Отправить</button>
+</form>
+
   <audio autoplay loop>
     <source src="https://www.bensound.com/bensound-music/bensound-sunny.mp3" type="audio/mpeg">
   </audio>
+</div>
+
+<div class="lilies" id="lilies"></div>
+
+<script>
+  // Анимация падающих лилий
+  const liliesContainer = document.getElementById('lilies');
+  for (let i = 0; i < 20; i++) {
+    const lily = document.createElement('img');
+    lily.src = 'https://pngimg.com/uploads/lily/lily_PNG12259.png';
+    lily.className = 'lily';
+    lily.style.left = Math.random() * 100 + 'vw';
+    lily.style.animationDuration = (5 + Math.random() * 5) + 's';
+    liliesContainer.appendChild(lily);
+  }
+</script>
+
 </body>
 </html>
