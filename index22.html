@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Приглашение на юбилей</title>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Playfair Display', serif;
+      background: url('images.jpg') no-repeat center center fixed;
+      background-size: cover;
+    }
+    .container {
+      max-width: 1000px;
+      margin: 50px auto;
+      background: rgba(255, 255, 255, 0.92);
+      border-radius: 25px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      padding: 40px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    .photo-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .photo {
+      width: 100%;
+      overflow: hidden;
+      border-radius: 20px;
+    }
+    .photo img {
+      width: 100%;
+      height: auto;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+    .photo img:hover {
+      transform: scale(1.03);
+    }
+    .text {
+      flex: 2;
+      min-width: 300px;
+      animation: fadeIn 2s ease;
+      text-align: center;
+    }
+    .text h1 {
+      font-size: 32px;
+      color: #6d214f;
+    }
+    .text p {
+      font-size: 18px;
+      color: #2d3436;
+      line-height: 1.6;
+    }
+    form {
+      margin-top: 20px;
+    }
+    input, textarea, select, button {
+      width: 100%;
+      padding: 12px;
+      margin: 8px 0;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      font-family: 'Playfair Display', serif;
+    }
+    button {
+      background-color: #6d214f;
+      color: #fff;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    button:hover {
+      background-color: #b33771;
+    }
+    .countdown {
+      margin-top: 30px;
+      background: rgba(255,255,255,0.7);
+      padding: 10px;
+      border-radius: 10px;
+      font-weight: bold;
+      font-size: 20px;
+    }
+    /* Модальное окно */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.8);
+      align-items: center;
+      justify-content: center;
+      overflow: auto;
+    }
+    .modal img {
+      max-width: 90%;
+      max-height: 90%;
+      border-radius: 20px;
+    }
+    .modal.open {
+      display: flex;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @media (max-width: 768px) {
+      .container {
+        margin: 20px;
+        padding: 20px;
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+  <div class="photo-container">
+    <div class="photo"><img src="family.png" alt="Семья" onclick="openModal(this.src)"></div>
+    <div class="photo"><img src="family2.png" alt="Семья с детьми" onclick="openModal(this.src)"></div>
+    <div class="photo"><img src="family3.png" alt="Дети" onclick="openModal(this.src)"></div>
+    <div class="photo"><img src="family4.png" alt="Все вместе" onclick="openModal(this.src)"></div>
+  </div>
+
+  <div class="text">
+    <h1>Құрметті туыстар!</h1>
+    <p>
+      Қапаровтар әулеті сіздерді аяулы анамыз Талиға Ғабдуллқызының 70 жас мерейтойына шақырады!<br>
+      📍 Алматы қаласы<br>
+      🕒 2025 жылдың 13 қыркүйегі, сағат 18:00
+    </p>
+    <form action="https://formspree.io/f/xyzevdqb" method="POST">
+      <input type="text" name="Имя" required placeholder="Атыңызды енгізіңіз">
+      <textarea name="Кто приедет?" placeholder="Мысалы: Мен, жұбайым және балаларым"></textarea>
+      <select name="Ответ" required>
+        <option value="Да">Иә</option>
+        <option value="Нет">Жоқ</option>
+        <option value="Не уверен(а)">Әлі шешкен жоқпын</option>
+      </select>
+      <button type="submit">Жауап беру</button>
+    </form>
+    <div class="countdown" id="countdown">Мерекеге дейін: ...</div>
+  </div>
+</div>
+
+<!-- Модальное окно -->
+<div class="modal" id="modal" onclick="closeModal()">
+  <img id="modal-img" src="" alt="Просмотр">
+</div>
+
+<script>
+// Открытие модального окна
+function openModal(src) {
+  const modal = document.getElementById('modal');
+  const modalImg = document.getElementById('modal-img');
+  modalImg.src = src;
+  modal.classList.add('open');
+  confetti({ particleCount: 150, spread: 90 });
+}
+
+function closeModal() {
+  const modal = document.getElementById('modal');
+  modal.classList.remove('open');
+}
+
+// Таймер обратного отсчета
+const countdownElement = document.getElementById('countdown');
+const eventDate = new Date("2025-09-13T18:00:00").getTime();
+
+setInterval(() => {
+  const now = new Date().getTime();
+  const distance = eventDate - now;
+
+  if (distance <= 0) {
+    countdownElement.innerHTML = "Мереке басталды!";
+    return;
+  }
+
+  const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+  const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+  countdownElement.innerHTML = `Мерекеге дейін: ${days} күн ${hours} сағат ${minutes} минут ${seconds} секунд`;
+}, 1000);
+</script>
+
+</body>
+</html>
