@@ -1,587 +1,322 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="kk">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Приглашение на юбилей</title>
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Тойға шақыру</title>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Marcellus&display=swap');
+
     body {
       margin: 0;
-      font-family: 'Playfair Display', serif;
+      font-family: 'Marcellus', serif;
       background: url('images.jpg') no-repeat center center fixed;
       background-size: cover;
+      color: #fff;
+      overflow-x: hidden;
+    }
+
+    .language-toggle,
+    .music-toggle {
+      position: fixed;
+      top: 10px;
+      padding: 8px 12px;
+      border-radius: 20px;
+      border: none;
+      background: rgba(0,0,0,0.6);
+      color: #fff;
+      cursor: pointer;
+      z-index: 10;
+      transition: background 0.3s;
+      font-size: 14px;
+    }
+
+    .language-toggle:hover,
+    .music-toggle:hover {
+      background: rgba(255,255,255,0.2);
+    }
+
+    .language-toggle {
+      right: 10px;
+    }
+
+    .music-toggle {
+      right: 100px;
     }
 
     .container {
-      max-width: 1000px;
-      margin: 50px auto;
-      background: rgba(255, 255, 255, 0.92);
-      border-radius: 25px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-      padding: 40px;
-      display: flex;
-      gap: 30px;
-      flex-wrap: wrap;
-    }
-
-    .photo-container {
-      flex: 1;
+      max-width: 100%;
+      margin: 80px 15px 30px;
+      background: rgba(0, 0, 0, 0.5);
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.4);
       display: flex;
       flex-direction: column;
       gap: 20px;
-      min-width: 250px;
     }
 
-    .photo {
-      max-width: 400px;
-      max-height: 400px;
-      overflow: hidden;
-      border-radius: 20px;
+    .photos {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
     }
 
-    .photo img {
+    .photos img {
       width: 100%;
-      height: 100%;
+      height: auto;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      cursor: pointer;
+      transition: all 0.4s ease;
       object-fit: cover;
-      border-radius: 20px;
-      cursor: pointer;
-      transition: transform 0.3s ease;
     }
 
-    .photo img:hover {
-      transform: scale(1.03);
+    /* Разные размеры для фотографий */
+    .photos img:nth-child(1) {
+      height: 220px;
+    }
+    .photos img:nth-child(2) {
+      height: 180px;
+    }
+    .photos img:nth-child(3) {
+      height: 200px;
+    }
+    .photos img:nth-child(4) {
+      height: 240px;
     }
 
-    .text {
-      flex: 2;
-      animation: fadeIn 2s ease;
-      min-width: 300px;
-    }
-
-    .text h1 {
-      font-size: 36px;
-      color: #6d214f;
-      margin-bottom: 20px;
-      text-align: center;
-    }
-
-    .text p {
-      font-size: 18px;
-      color: #2d3436;
-      line-height: 1.6;
-      text-align: center;
-    }
-
-    form {
-      margin-top: 30px;
-      background: rgba(255, 255, 255, 0.8);
-      padding: 20px;
-      border-radius: 15px;
-    }
-
-    input, select, textarea, button {
-      padding: 12px;
-      font-size: 16px;
-      margin: 8px 0;
-      width: 100%;
-      border: 1px solid #ccc;
-      border-radius: 10px;
-      font-family: 'Playfair Display', serif;
-    }
-
-    button {
-      background-color: #6d214f;
-      color: white;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-      margin-top: 20px;
-      font-weight: bold;
-    }
-
-    button:hover {
-      background-color: #b33771;
-    }
-
-    .countdown {
-      text-align: center;
-      margin-top: 40px;
-      font-size: 22px;
-      color: #222;
-      font-weight: bold;
-      background: rgba(255, 255, 255, 0.7);
-      padding: 15px;
-      border-radius: 10px;
-    }
-
-    .music-control {
-      text-align: center;
-      margin: 20px auto;
-    }
-
-    .music-btn {
-      background: #6d214f;
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 50px;
-      cursor: pointer;
-      font-size: 16px;
-      transition: all 0.3s ease;
-    }
-
-    .music-btn:hover {
-      background: #b33771;
+    .photos img:hover {
       transform: scale(1.05);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+      z-index: 2;
     }
 
-    .language-switcher {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      z-index: 1000;
+    .content {
       display: flex;
-      gap: 10px;
-      background: rgba(255,255,255,0.8);
-      padding: 10px;
-      border-radius: 10px;
+      flex-direction: column;
     }
 
-    .language-btn {
-      padding: 5px 10px;
-      background: transparent;
-      border: 1px solid #6d214f;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-
-    .language-btn:hover {
-      background: #6d214f;
-      color: white;
-    }
-
-    .language-btn.active {
-      background: #6d214f;
-      color: white;
+    .invitation-text {
+      font-size: 1.1em;
+      line-height: 1.5;
+      margin-bottom: 15px;
+      animation: fadeIn 2s ease-out;
     }
 
     @keyframes fadeIn {
-      from {opacity: 0;}
-      to {opacity: 1;}
+      from {opacity: 0; transform: translateY(20px);}
+      to {opacity: 1; transform: translateY(0);}
     }
 
-    .falling-flowers {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      overflow: hidden;
-      z-index: -1;
-    }
-
-    .flower {
-      position: absolute;
-      top: -50px;
-      width: 30px;
-      height: 30px;
-      background-image: url('romashka.png');
-      background-size: cover;
-      animation: fall linear infinite;
-    }
-
-    /* Стили для модального окна */
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 1001;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0,0,0,0.9);
-      overflow: auto;
-      animation: fadeIn 0.3s;
-    }
-
-    .modal-content {
+    form {
       display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100%;
+      flex-direction: column;
+      gap: 10px;
     }
 
-    .modal-image {
-      max-width: 90%;
-      max-height: 90%;
-      object-fit: contain;
+    input, select {
+      padding: 10px;
+      font-size: 0.9em;
+      border: none;
+      border-radius: 8px;
+      background: #fff;
+      color: #333;
     }
 
-    .close {
-      position: absolute;
-      top: 20px;
-      right: 35px;
-      color: #f1f1f1;
-      font-size: 40px;
+    button.submit {
+      background: #d4af37;
+      color: #000;
       font-weight: bold;
-      transition: 0.3s;
+      padding: 10px;
+      border: none;
+      border-radius: 8px;
       cursor: pointer;
+      transition: background 0.3s;
+      font-size: 0.9em;
     }
 
-    .close:hover {
-      color: #b33771;
+    button.submit:hover {
+      background: #bfa02f;
     }
 
-    @media (max-width: 768px) {
+    .countdown {
+      margin-top: 20px;
+      font-size: 1em;
+      text-align: center;
+      font-weight: bold;
+      text-shadow: 1px 1px 2px #000;
+    }
+
+    @media (min-width: 768px) {
       .container {
+        flex-direction: row;
+        margin: 100px auto 40px;
+        max-width: 1000px;
+        padding: 30px;
+      }
+      
+      .photos {
+        flex: 1;
+        display: flex;
         flex-direction: column;
-        margin: 20px;
-        padding: 20px;
       }
       
-      .photo-container, .photo {
-        max-width: 100%;
-        margin: 0 auto 20px;
+      .photos img {
+        width: 100%;
+        max-width: 250px;
       }
       
-      .text h1 {
-        font-size: 28px;
+      .content {
+        flex: 2;
       }
       
-      .countdown {
-        font-size: 18px;
+      .language-toggle,
+      .music-toggle {
+        top: 20px;
+        padding: 10px 15px;
       }
       
-      .language-switcher {
-        top: 10px;
-        right: 10px;
+      .language-toggle {
+        right: 20px;
       }
       
-      .close {
-        font-size: 30px;
-        top: 15px;
-        right: 25px;
+      .music-toggle {
+        right: 140px;
       }
     }
   </style>
 </head>
 <body>
+  <button class="music-toggle" onclick="toggleMusic()">🎵 Музыка</button>
+  <button class="language-toggle" onclick="toggleLanguage()">Қазақша / Русский</button>
 
-<!-- Переключатель языков -->
-<div class="language-switcher">
-  <button class="language-btn active" onclick="changeLanguage('kz')">KZ</button>
-  <button class="language-btn" onclick="changeLanguage('ru')">RU</button>
-</div>
+  <div class="container">
+    <div class="photos">
+      <img src="family.png" onclick="launchConfetti()" alt="Photo 1"/>
+      <img src="family2.png" onclick="launchConfetti()" alt="Photo 2"/>
+      <img src="family3.png" onclick="launchConfetti()" alt="Photo 3"/>
+      <img src="family4.png" onclick="launchConfetti()" alt="Photo 4"/>
+    </div>
 
-<!-- Музыкальный плеер -->
-<div class="music-control">
-  <button id="music-btn" class="music-btn">🎵 Әнді қосу</button>
-  <audio id="bg-music" loop>
-    <source src="music.mp3" type="audio/mpeg">
-    Ваш браузер не поддерживает аудио.
-  </audio>
-</div>
+    <div class="content">
+      <div class="invitation-text" id="invitationText">
+        Құрметті туыстар!<br/>
+        Қапаровтар әулеті, сіздерді аяулы анамыз <b>Талиға Ғабдуллқызының 70 жас</b> мерей тойының қадірлі қонағы болуға шақырады!<br/>
+        <br/>
+        📍 <b>Өтетін орны:</b> Алматы қаласы<br/>
+        🕒 <b>Уақыты:</b> 2025 жылдың 13 қыркүйегі, сағат 13:00
+      </div>
 
-<div class="container">
-  <div class="photo-container">
-    <div class="photo">
-      <img src="family.png" alt="Семья Капаровых" onclick="handlePhotoClick(event)" id="main-photo">
-    </div>
-    <div class="photo">
-      <img src="family2.png" alt="Семья Капаровых с детьми" onclick="handlePhotoClick(event)">
-    </div>
-    <div class="photo">
-      <img src="family3.png" alt="Семья Капаровых дети" onclick="handlePhotoClick(event)">
-    </div>
-    <div class="photo">
-      <img src="family4.png" alt="Семья Капаровых все" onclick="handlePhotoClick(event)">
+      <form id="form" action="https://formspree.io/f/xyzevdqb" method="POST">
+        <input type="text" name="name" id="name" placeholder="Сіздің атыңыз кім?" required />
+        <input type="text" name="relation" id="relation" placeholder="Кім келеді?" required />
+        <select name="attendance" id="attendance" required>
+          <option value="">Сіз келе аласыз ба?</option>
+          <option value="Иә">Иә</option>
+          <option value="Жоқ">Жоқ</option>
+          <option value="Әлі білмеймін">Әлі білмеймін</option>
+        </select>
+        <button class="submit" type="submit">Жіберу</button>
+      </form>
+      <div class="countdown" id="countdown"></div>
     </div>
   </div>
-  
-  <div class="text">
-    <h1 id="title">Құрметті туыстар!</h1>
-    <p id="invitation-text"> 
-      <strong>Қапаровтар</strong> әулеті, сіздерді аяулы анамыз <strong>Талиға Ғабдуллқызының 70 жас</strong> мерей тойының қадірлі қонағы болуға шақырамыз!<br><br>
-      
-      📍 <span id="place">Өтетін орны: <em>Алматы қаласы</em></span><br>
-      🕒 <span id="time">2025 жылдың 13 қыркүйегі, кешкі сағат 18:00.</span>
-    </p>
 
-    <form action="https://formspree.io/f/xyzevdqb" method="POST">
-      <label id="name-label">Сіздің атыңыз кім?</label>
-      <input type="text" name="Имя" required placeholder="Атыңызды жазыңыз">
+  <audio id="bgMusic" src="music.mp3" loop></audio>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+  <script>
+    const music = document.getElementById('bgMusic');
+    let isPlaying = false;
+    let musicTimer;
 
-      <label id="guests-label">Кім келеді?</label>
-      <textarea name="Кто приедит?" placeholder="Мысалы: Мен, жұбайым және балаларым"></textarea>
-
-      <label id="attendance-label">Сіз келе аласыз ба?</label>
-      <select name="Ответ" required>
-        <option value="Да">Иә</option>
-        <option value="Нет">Жоқ</option>
-        <option value="Не уверен(а)">Нақты емес</option>
-      </select>
-
-      <button type="submit" id="submit-btn">Жауапты жіберу</button>
-    </form>
-
-    <div class="countdown" id="countdown">Мереке басталуына: ...</div>
-  </div>
-</div>
-
-<!-- Модальное окно для просмотра фото -->
-<div id="imageModal" class="modal">
-  <span class="close" onclick="closeModal()">&times;</span>
-  <div class="modal-content">
-    <img id="modalImage" class="modal-image">
-  </div>
-</div>
-
-<div class="falling-flowers" id="falling-flowers"></div>
-
-<script>
-  // Тексты для разных языков
-  const translations = {
-    kz: {
-      title: "Құрметті туыстар!",
-      invitation: "<strong>Қапаровтар</strong> әулеті, сіздерді аяулы анамыз <strong>Талиға Ғабдуллқызының 70 жас</strong> мерей тойының қадірлі қонағы болуға шақырамыз!",
-      place: "Өтетін орны: <em>Алматы қаласы</em>",
-      time: "2025 жылдың 13 қыркүйегі, кешкі сағат 18:00",
-      nameLabel: "Сіздің атыңыз кім?",
-      namePlaceholder: "Атыңызды жазыңыз",
-      guestsLabel: "Кім келеді?",
-      guestsPlaceholder: "Мысалы: Мен, жұбайым және балаларым",
-      attendanceLabel: "Сіз келе аласыз ба?",
-      attendanceOptions: ["Иә", "Жоқ", "Нақты емес"],
-      submitButton: "Жауапты жіберу",
-      countdownText: "Мереке басталуына:",
-      countdownStarted: "Мереке басталды!<br>Сізді күтеміз!",
-      musicButtonPlay: "🎵 Әнді қосу",
-      musicButtonStop: "❌ Әнді өшіру",
-      photoAlt: "Семья Капаровых"
-    },
-    ru: {
-      title: "Дорогие родные!",
-      invitation: "Семья <strong>Капаровых</strong> приглашает вас на торжественный вечер, посвященный <strong>70-летию</strong> нашей любимой мамы и бабушки <strong>Талиги Габдулловны</strong>!",
-      place: "Место проведения: <em>г. Алматы</em>",
-      time: "13 сентября 2025 года, начало в 18:00",
-      nameLabel: "Ваше имя:",
-      namePlaceholder: "Введите ваше имя",
-      guestsLabel: "Кто будет присутствовать?",
-      guestsPlaceholder: "Например: я, супруг(а) и двое детей",
-      attendanceLabel: "Вы сможете присутствовать?",
-      attendanceOptions: ["Да", "Нет", "Не уверен(а)"],
-      submitButton: "Подтвердить участие",
-      countdownText: "До праздника осталось:",
-      countdownStarted: "Праздник уже начался!<br>Ждём вас!",
-      musicButtonPlay: "🎵 Включить музыку",
-      musicButtonStop: "❌ Выключить музыку",
-      photoAlt: "Семья Капаровых"
-    }
-  };
-
-  // Функция смены языка
-  function changeLanguage(lang) {
-    const t = translations[lang];
-    
-    // Обновляем тексты на странице
-    document.getElementById('title').innerHTML = t.title;
-    document.getElementById('invitation-text').innerHTML = 
-      `${t.invitation}<br><br>📍 <span id="place">${t.place}</span><br>🕒 <span id="time">${t.time}</span>`;
-    
-    // Обновляем форму
-    document.getElementById('name-label').textContent = t.nameLabel;
-    document.querySelector('input[name="Имя"]').placeholder = t.namePlaceholder;
-    document.getElementById('guests-label').textContent = t.guestsLabel;
-    document.querySelector('textarea').placeholder = t.guestsPlaceholder;
-    document.getElementById('attendance-label').textContent = t.attendanceLabel;
-    
-    const options = document.querySelectorAll('select option');
-    options.forEach((opt, i) => {
-      opt.textContent = t.attendanceOptions[i];
-    });
-    
-    document.getElementById('submit-btn').textContent = t.submitButton;
-    
-    // Обновляем альт текст для фото
-    document.getElementById('main-photo').alt = t.photoAlt;
-    
-    // Обновляем кнопку музыки
-    const musicBtn = document.getElementById('music-btn');
-    if (musicBtn.textContent.includes('Әнді') || musicBtn.textContent.includes('Включить')) {
-      musicBtn.textContent = t.musicButtonPlay;
-    } else {
-      musicBtn.textContent = t.musicButtonStop;
-    }
-    
-    // Обновляем счетчик
-    const countdownText = document.getElementById('countdown').textContent;
-    if (countdownText.includes('Мереке') || countdownText.includes('До праздника')) {
-      const now = new Date().getTime();
-      const distance = new Date("2025-09-13T18:00:00").getTime() - now;
-      if (distance < 0) {
-        document.getElementById('countdown').innerHTML = t.countdownStarted;
-      } else {
-        document.getElementById('countdown').innerHTML = t.countdownText + " ...";
-      }
-    }
-    
-    // Обновляем активную кнопку языка
-    document.querySelectorAll('.language-btn').forEach(btn => {
-      btn.classList.remove('active');
-    });
-    event.target.classList.add('active');
-    
-    // Сохраняем выбор языка
-    localStorage.setItem('language', lang);
-  }
-
-  // Конфетти при клике на фото
-  let confettiRunning = false;
-
-  function launchConfetti() {
-    if (confettiRunning) return;
-
-    confettiRunning = true;
-    const duration = 5000;
-    const end = Date.now() + duration;
-
-    const interval = setInterval(() => {
-      if (Date.now() > end) {
-        clearInterval(interval);
-      }
-
-      confetti({
-        particleCount: 40,
-        spread: 90,
-        origin: { y: 0.6 }
-      });
-    }, 200);
-
-    setTimeout(() => {
-      confettiRunning = false;
-    }, 5000);
-  }
-
-  // Функции для работы с модальным окном
-  function openModal(imgSrc) {
-    const modal = document.getElementById('imageModal');
-    const modalImg = document.getElementById('modalImage');
-    modal.style.display = "block";
-    modalImg.src = imgSrc;
-  }
-
-  function closeModal() {
-    document.getElementById('imageModal').style.display = "none";
-  }
-
-  // Обработчик клика по фото
-  function handlePhotoClick(event) {
-    // Запускаем конфетти
-    launchConfetti();
-    
-    // Открываем фото в модальном окне
-    openModal(event.target.src);
-  }
-
-  // Закрытие модального окна при клике вне изображения
-  window.onclick = function(event) {
-    const modal = document.getElementById('imageModal');
-    if (event.target == modal) {
-      closeModal();
-    }
-  }
-
-  // Таймер обратного отсчета
-  const targetDate = new Date("2025-09-13T18:00:00").getTime();
-  const countdownEl = document.getElementById("countdown");
-
-  function updateCountdown() {
-    const now = new Date().getTime();
-    const distance = targetDate - now;
-    const lang = localStorage.getItem('language') || 'kz';
-    const t = translations[lang];
-
-    if (distance < 0) {
-      countdownEl.innerHTML = t.countdownStarted;
-      return;
-    }
-
-    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-
-    countdownEl.innerHTML = `${t.countdownText}<br>${days} ${lang === 'kz' ? 'күн' : 'дней'} ${hours} ${lang === 'kz' ? 'сағат' : 'часов'} ${minutes} ${lang === 'kz' ? 'минут' : 'минут'}`;
-  }
-
-  setInterval(updateCountdown, 1000);
-  updateCountdown();
-
-  // Падающие цветы
-  function createFlower() {
-    const flower = document.createElement('div');
-    flower.classList.add('flower');
-    
-    flower.style.left = Math.random() * 100 + 'vw';
-    flower.style.animationDuration = (3 + Math.random() * 5) + 's';
-    flower.style.opacity = Math.random() * 0.7 + 0.3;
-    flower.style.width = (20 + Math.random() * 20) + 'px';
-    flower.style.height = flower.style.width;
-
-    document.getElementById('falling-flowers').appendChild(flower);
-
-    setTimeout(() => {
-      flower.remove();
-    }, 8000);
-  }
-
-  setInterval(createFlower, 300);
-
-  // Управление музыкой
-  const music = document.getElementById('bg-music');
-  const musicBtn = document.getElementById('music-btn');
-  let isPlaying = false;
-
-  function toggleMusic() {
-    const lang = localStorage.getItem('language') || 'kz';
-    const t = translations[lang];
-    
-    if (isPlaying) {
-      music.pause();
-      musicBtn.textContent = t.musicButtonPlay;
-    } else {
-      music.play()
-        .then(() => {
-          musicBtn.textContent = t.musicButtonStop;
-        })
-        .catch(error => {
-          console.error("Ошибка воспроизведения:", error);
-          musicBtn.textContent = '🎵 Ошибка';
+    // Функция для автоматического включения музыки через 5 секунд
+    function autoPlayMusic() {
+      musicTimer = setTimeout(() => {
+        music.play().then(() => {
+          isPlaying = true;
+          document.querySelector('.music-toggle').textContent = '🎵 Музыка (вкл)';
+        }).catch(e => {
+          console.log("Автовоспроизведение заблокировано");
+          // Если авто-воспроизведение заблокировано, показываем сообщение
+          alert('Для воспроизведения музыки нажмите кнопку "Музыка"');
         });
+      }, 5000); // 5 секунд
     }
-    isPlaying = !isPlaying;
-  }
 
-  musicBtn.addEventListener('click', toggleMusic);
-
-  // При загрузке страницы устанавливаем сохраненный язык
-  document.addEventListener('DOMContentLoaded', function() {
-    const savedLang = localStorage.getItem('language') || 'kz';
-    const btn = savedLang === 'kz' 
-      ? document.querySelector('.language-btn:first-child') 
-      : document.querySelector('.language-btn:last-child');
-    btn.click();
-    
-    // Опционально: автоматическое включение музыки при первом взаимодействии
-    document.addEventListener('click', function initMusic() {
-      if (!isPlaying) {
-        toggleMusic();
+    function toggleMusic() {
+      clearTimeout(musicTimer); // Отменяем таймер автовоспроизведения при ручном управлении
+      if (isPlaying) {
+        music.pause();
+        document.querySelector('.music-toggle').textContent = '🎵 Музыка';
+      } else {
+        music.play().catch(e => {
+          alert('Нажмите "Разрешить" для воспроизведения музыки');
+        });
+        document.querySelector('.music-toggle').textContent = '🎵 Музыка (вкл)';
       }
-      document.removeEventListener('click', initMusic);
-    }, { once: true });
-  });
-</script>
+      isPlaying = !isPlaying;
+    }
+
+    function launchConfetti() {
+      confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+    }
+
+    function toggleLanguage() {
+      const text = document.getElementById('invitationText');
+      const name = document.getElementById('name');
+      const relation = document.getElementById('relation');
+      const attendance = document.getElementById('attendance');
+      const form = document.getElementById('form');
+      const currentLang = text.innerHTML.includes("Қапаровтар");
+
+      if (currentLang) {
+        text.innerHTML = `Дорогие родственники!<br/>
+        Семья Капаровых приглашает вас стать почетным гостем на <b>70-летии нашей дорогой мамы Талиги Габдулловны</b>!<br/><br/>
+        📍 <b>Место:</b> город Алматы<br/>
+        🕒 <b>Дата:</b> 13 сентября 2025 года, 13:00`;
+        name.placeholder = "Как вас зовут?";
+        relation.placeholder = "Кто будет?";
+        attendance.options[0].text = "Вы придёте?";
+        attendance.options[1].text = "Да";
+        attendance.options[2].text = "Нет";
+        attendance.options[3].text = "Ещё не знаю";
+        form.querySelector('button.submit').innerText = "Отправить";
+      } else {
+        text.innerHTML = `Құрметті туыстар!<br/>
+        Қапаровтар әулеті, сіздерді аяулы анамыз <b>Талиға Ғабдуллқызының 70 жас</b> мерей тойының қадірлі қонағы болуға шақырады!<br/><br/>
+        📍 <b>Өтетін орны:</b> Алматы қаласы<br/>
+        🕒 <b>Уақыты:</b> 2025 жылдың 13 қыркүйегі, сағат 13:00`;
+        name.placeholder = "Сіздің атыңыз кім?";
+        relation.placeholder = "Кім келеді?";
+        attendance.options[0].text = "Сіз келе аласыз ба?";
+        attendance.options[1].text = "Иә";
+        attendance.options[2].text = "Жоқ";
+        attendance.options[3].text = "Әлі білмеймін";
+        form.querySelector('button.submit').innerText = "Жіберу";
+      }
+    }
+
+    const eventDate = new Date("2025-09-13T13:00:00");
+    const countdownEl = document.getElementById("countdown");
+    function updateCountdown() {
+      const now = new Date();
+      const diff = eventDate - now;
+      if (diff <= 0) {
+        countdownEl.innerHTML = "Той басталды!";
+        return;
+      }
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      const minutes = Math.floor((diff / 1000 / 60) % 60);
+      const seconds = Math.floor((diff / 1000) % 60);
+      countdownEl.innerHTML = `Мерекеге дейін: ${days} күн, ${hours} сағат, ${minutes} минут, ${seconds} секунд`;
+    }
+    setInterval(updateCountdown, 1000);
+    updateCountdown();
+
+    // Запускаем автовоспроизведение музыки через 5 секунд после загрузки страницы
+    window.addEventListener('load', autoPlayMusic);
+  </script>
 </body>
 </html>
