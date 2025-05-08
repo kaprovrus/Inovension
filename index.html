@@ -45,51 +45,36 @@
     }
 
     .container {
+      display: flex;
+      flex-direction: column;
       max-width: 100%;
       margin: 80px 15px 30px;
       background: rgba(0, 0, 0, 0.5);
       padding: 20px;
       border-radius: 15px;
       box-shadow: 0 0 15px rgba(0,0,0,0.4);
-      display: flex;
-      flex-direction: column;
       gap: 20px;
     }
 
     .photos {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 15px;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
     }
 
     .photos img {
       width: 100%;
-      height: auto;
+      height: 160px;
       border-radius: 12px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-      cursor: pointer;
-      transition: all 0.4s ease;
       object-fit: cover;
-    }
-
-    /* Разные размеры для фотографий */
-    .photos img:nth-child(1) {
-      height: 220px;
-    }
-    .photos img:nth-child(2) {
-      height: 180px;
-    }
-    .photos img:nth-child(3) {
-      height: 200px;
-    }
-    .photos img:nth-child(4) {
-      height: 240px;
+      transition: all 0.3s ease;
+      cursor: pointer;
     }
 
     .photos img:hover {
       transform: scale(1.05);
       box-shadow: 0 8px 20px rgba(0,0,0,0.4);
-      z-index: 2;
     }
 
     .content {
@@ -98,9 +83,8 @@
     }
 
     .invitation-text {
-      font-size: 1.1em;
-      line-height: 1.5;
-      margin-bottom: 15px;
+      font-size: 1em;
+      line-height: 1.6;
       animation: fadeIn 2s ease-out;
     }
 
@@ -141,7 +125,7 @@
     }
 
     .countdown {
-      margin-top: 20px;
+      margin-top: 15px;
       font-size: 1em;
       text-align: center;
       font-weight: bold;
@@ -151,36 +135,36 @@
     @media (min-width: 768px) {
       .container {
         flex-direction: row;
-        margin: 100px auto 40px;
         max-width: 1000px;
+        margin: 100px auto 40px;
         padding: 30px;
       }
-      
+
       .photos {
         flex: 1;
-        display: flex;
-        flex-direction: column;
+        grid-template-columns: 1fr;
       }
-      
+
       .photos img {
-        width: 100%;
+        height: 200px;
         max-width: 250px;
       }
-      
+
       .content {
         flex: 2;
+        padding-left: 20px;
       }
-      
+
       .language-toggle,
       .music-toggle {
         top: 20px;
         padding: 10px 15px;
       }
-      
+
       .language-toggle {
         right: 20px;
       }
-      
+
       .music-toggle {
         right: 140px;
       }
@@ -202,8 +186,7 @@
     <div class="content">
       <div class="invitation-text" id="invitationText">
         Құрметті туыстар!<br/>
-        Қапаровтар әулеті, сіздерді аяулы анамыз <b>Талиға Ғабдуллқызының 70 жас</b> мерей тойының қадірлі қонағы болуға шақырады!<br/>
-        <br/>
+        Қапаровтар әулеті, сіздерді аяулы анамыз <b>Талиға Ғабдуллқызының 70 жас</b> мерей тойының қадірлі қонағы болуға шақырады!<br/><br/>
         📍 <b>Өтетін орны:</b> Алматы қаласы<br/>
         🕒 <b>Уақыты:</b> 2025 жылдың 13 қыркүйегі, сағат 13:00
       </div>
@@ -230,30 +213,28 @@
     let isPlaying = false;
     let musicTimer;
 
-    // Функция для автоматического включения музыки через 5 секунд
     function autoPlayMusic() {
       musicTimer = setTimeout(() => {
         music.play().then(() => {
           isPlaying = true;
           document.querySelector('.music-toggle').textContent = '🎵 Музыка (вкл)';
         }).catch(e => {
-          console.log("Автовоспроизведение заблокировано");
-          // Если авто-воспроизведение заблокировано, показываем сообщение
-          alert('Для воспроизведения музыки нажмите кнопку "Музыка"');
+          alert('Музыканы тыңдау үшін "Музыка" батырмасын басыңыз.');
         });
-      }, 5000); // 5 секунд
+      }, 5000);
     }
 
     function toggleMusic() {
-      clearTimeout(musicTimer); // Отменяем таймер автовоспроизведения при ручном управлении
+      clearTimeout(musicTimer);
       if (isPlaying) {
         music.pause();
         document.querySelector('.music-toggle').textContent = '🎵 Музыка';
       } else {
-        music.play().catch(e => {
-          alert('Нажмите "Разрешить" для воспроизведения музыки');
+        music.play().then(() => {
+          document.querySelector('.music-toggle').textContent = '🎵 Музыка (вкл)';
+        }).catch(e => {
+          alert('Музыканы қосу үшін рұқсат беруіңіз қажет.');
         });
-        document.querySelector('.music-toggle').textContent = '🎵 Музыка (вкл)';
       }
       isPlaying = !isPlaying;
     }
@@ -299,6 +280,7 @@
 
     const eventDate = new Date("2025-09-13T13:00:00");
     const countdownEl = document.getElementById("countdown");
+
     function updateCountdown() {
       const now = new Date();
       const diff = eventDate - now;
@@ -312,10 +294,10 @@
       const seconds = Math.floor((diff / 1000) % 60);
       countdownEl.innerHTML = `Мерекеге дейін: ${days} күн, ${hours} сағат, ${minutes} минут, ${seconds} секунд`;
     }
+
     setInterval(updateCountdown, 1000);
     updateCountdown();
 
-    // Запускаем автовоспроизведение музыки через 5 секунд после загрузки страницы
     window.addEventListener('load', autoPlayMusic);
   </script>
 </body>
